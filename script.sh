@@ -9,17 +9,14 @@ separator='---'
 # Counter for blocks
 counter=0
 
-# Read blocks from the file and store each block in a separate variable
-while IFS= read -r block; do
-    # If the block is not empty
-    if [ -n "$block" ]; then
-        # Increment the counter
-        ((counter++))
-        # Print the block label
-        printf "block%02d:\n" "$counter"
-        # Print the block content
-        echo "$block"
-        # Add an empty line after each block
-        echo
-    fi
-done < <(awk -v RS="$separator" 'NF > 0' "$file")
+# Read blocks from the file and print each block with a label
+awk -v RS="$separator" 'NF > 0' "$file" | while IFS= read -r block; do
+    # Increment the counter
+    ((counter++))
+    # Print the block label
+    printf "block%02d:\n" "$counter"
+    # Print the block content
+    echo "$block"
+    # Add an empty line after each block for clarity
+    echo
+done
