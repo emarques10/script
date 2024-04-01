@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Name of the YAML file
-file="your_file.yaml"
+file="kubernetes.yaml"
 
 # Separator pattern (matches "---")
 separator='---'
@@ -9,14 +9,24 @@ separator='---'
 # Counter for blocks
 counter=0
 
-# Read blocks from the file and print each block with a label
-awk -v RS="$separator" 'NF > 0' "$file" | while IFS= read -r block; do
-    # Increment the counter
-    ((counter++))
-    # Print the block label
-    printf "block%02d:\n" "$counter"
-    # Print the block content
-    echo "$block"
-    # Add an empty line after each block for clarity
-    echo
+# Array to store blocks
+declare -a blocks
+
+# Read the file line by line
+while IFS= read -r line; do
+    # If the line matches the separator pattern
+    if [[ "$line" =~ $separator ]]; then
+        # Increment the counter
+        ((counter++))
+    else
+        # Append the line to the current block
+        blocks[$counter]+="$line"$'\n'
+    fi
+done < "$file"
+
+# Print each block stored in a separate variable
+for ((i = 1; i <= counter; i++)); do
+    printf "block%02d:\n" "$i"
+    echo "${blocks[i]}"
+    echo  # Add an empty line between blocks
 done
