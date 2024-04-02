@@ -1,32 +1,30 @@
 #!/bin/bash
 
-# Name of the YAML file
-file="kubernetes.yaml"
+# Input file with separator
+input_file="your_input_file.txt"
 
-# Separator pattern (matches "---")
-separator='---'
+# Separator pattern
+separator="---"
 
-# Counter for blocks
-counter=0
+# Output file prefix
+output_prefix="output"
 
-# Array to store blocks
-declare -a blocks
+# Counter for parts
+part_counter=1
 
-# Read the file line by line
+# Read the input file line by line
 while IFS= read -r line; do
     # If the line matches the separator pattern
-    if [[ "$line" =~ $separator ]]; then
-        # Increment the counter
-        ((counter++))
-    else
-        # Append the line to the current block
-        blocks[$counter]+="$line"$'\n'
+    if [[ "$line" == "$separator" ]]; then
+        # Increment the part counter
+        ((part_counter++))
+        # Skip writing the separator to the output file
+        continue
     fi
-done < "$file"
 
-# Print each block stored in a separate variable
-for ((i = 1; i <= counter; i++)); do
-    printf "block%02d:\n" "$i"
-    echo "${blocks[i]}"
-    echo  # Add an empty line between blocks
-done
+    # Output file name for the current part
+    output_file="${output_prefix}_${part_counter}.txt"
+    
+    # Write the line to the current output file
+    echo "$line" >> "$output_file"
+done < "$input_file"
