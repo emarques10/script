@@ -17,8 +17,12 @@ separator_found=false
 
 # Loop through each line in the input file
 while IFS= read -r line; do
+    # Trim leading and trailing whitespaces from the line and separator
+    trimmed_line=$(echo "$line" | awk '{$1=$1};1')
+    trimmed_separator=$(echo "$separator" | awk '{$1=$1};1')
+
     # Check if the current line matches the separator
-    if [[ "$line" == "$separator" ]]; then
+    if [[ "$trimmed_line" == "$trimmed_separator" ]]; then
         # Set the flag to indicate separator is found
         separator_found=true
         # Increment the counter for output files
