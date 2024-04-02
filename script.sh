@@ -1,39 +1,41 @@
 #!/bin/bash
 
-# Input YAML file
-input_file="your_input_file.yaml"
+# Input file
+input_file="input.txt"
 
-# Separator pattern
+# Separator
 separator="---"
 
 # Output file prefix
 output_prefix="output"
 
-# Flag to indicate if the separator has been found
+# Counter for output files
+counter=1
+
+# Flag to indicate if separator has been found
 separator_found=false
 
-# Counter for parts
-part_counter=1
-
-# Output file name for the first part
-output_file="${output_prefix}_${part_counter}.yaml"
-
-# Read the input YAML file line by line
+# Loop through each line in the input file
 while IFS= read -r line; do
-    # If the line matches the separator pattern
+    # Check if the current line matches the separator
     if [[ "$line" == "$separator" ]]; then
-        # Set the separator flag to true
+        # Set the flag to indicate separator is found
         separator_found=true
-        # Increment the part counter
-        ((part_counter++))
-        # Update the output file name for the next part
-        output_file="${output_prefix}_${part_counter}.yaml"
-        # Skip writing the separator to the output file
+        # Increment the counter for output files
+        ((counter++))
+        # Continue to the next iteration
         continue
     fi
 
-    # If the separator has been found, write the line to the current output file
+    # If separator has been found, write the line to a new output file
     if [ "$separator_found" = true ]; then
+        # Generate the output file name
+        output_file="${output_prefix}_${counter}.txt"
+        # Write the line to the output file
+        echo "$line" >> "$output_file"
+    else
+        # If separator has not been found yet, write the line to the current output file
+        output_file="${output_prefix}_${counter}.txt"
         echo "$line" >> "$output_file"
     fi
 done < "$input_file"
