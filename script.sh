@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Input file with separator
-input_file="your_input_file.txt"
+# Input YAML file
+input_file="your_input_file.yaml"
 
 # Separator pattern
 separator="---"
@@ -16,9 +16,9 @@ separator_found=false
 part_counter=1
 
 # Output file name for the first part
-output_file="${output_prefix}_${part_counter}.txt"
+output_file="${output_prefix}_${part_counter}.yaml"
 
-# Read the input file line by line
+# Read the input YAML file line by line
 while IFS= read -r line; do
     # If the line matches the separator pattern
     if [[ "$line" == "$separator" ]]; then
@@ -27,7 +27,7 @@ while IFS= read -r line; do
         # Increment the part counter
         ((part_counter++))
         # Update the output file name for the next part
-        output_file="${output_prefix}_${part_counter}.txt"
+        output_file="${output_prefix}_${part_counter}.yaml"
         # Skip writing the separator to the output file
         continue
     fi
