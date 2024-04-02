@@ -18,8 +18,8 @@ separator_found=false
 # Loop through each line in the input file
 while IFS= read -r line; do
     # Trim leading and trailing whitespaces from the line and separator
-    trimmed_line=$(echo "$line" | awk '{$1=$1};1')
-    trimmed_separator=$(echo "$separator" | awk '{$1=$1};1')
+    trimmed_line=$(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    trimmed_separator=$(echo "$separator" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
     # Check if the current line matches the separator
     if [[ "$trimmed_line" == "$trimmed_separator" ]]; then
