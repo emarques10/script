@@ -32,9 +32,9 @@ while IFS= read -r line; do
         # Generate the output file name
         output_file="${output_prefix}_${counter}.txt"
         # Write the line to the output file
-        echo "$line" >> "$output_file"
+        echo "$line" > "$output_file"
     else
-        # If separator has not been found yet, write the line to the current output file
+        # If separator has not been found yet, append the line to the current output file
         output_file="${output_prefix}_${counter}.txt"
         echo "$line" >> "$output_file"
     fi
